@@ -1,0 +1,5 @@
+patient_id,name,age,gender,diagnosis,date_admitted
+1001,John Doe,45,M,Diabetes,2024-01-05
+1002,Jane Smith,30,F,Hypertension,2024-02-10
+1003,Ali Khan,55,M,Cancer,2024-03-15
+1004,Emily Zhang,40,F,Asthma,2024-04-20
