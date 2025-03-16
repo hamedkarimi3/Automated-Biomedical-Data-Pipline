@@ -1,6 +1,6 @@
-echo '[
+[
     {"patient_id": 1001, "gene": "BRCA1", "mutation": "Positive", "sequence": "AGCTTGAC..."},
     {"patient_id": 1002, "gene": "TP53", "mutation": "Negative", "sequence": "GATTACAG..."},
     {"patient_id": 1003, "gene": "EGFR", "mutation": "Positive", "sequence": "TTGACCTG..."},
     {"patient_id": 1004, "gene": "APOE", "mutation": "Negative", "sequence": "CGTAACTG..."}
-]' > data/genomic_data.json
+]
