@@ -1,0 +1,9 @@
+apache-airflow
+apache-airflow-providers-postgres
+apache-airflow-providers-snowflake
+pandas
+pyarrow
+boto3
+great-expectations
+pyspark
+kafka-python
