@@ -1,0 +1,74 @@
+Here is a complete list of necessary commands 
+to set up and troubleshoot your Airflow-based
+Automated Biomedical Data Pipeline using Docker
+and Python.
+ 
+ Step 1: Setup Python Virtual Environment
+# Create virtual environment
+python -m venv venv
+# Activate virtual environment (Windows PowerShell)
+venv\Scripts\Activate
+# If You Get a "Running Scripts is Disabled" Error Run this command to allow scripts:
+Set-ExecutionPolicy Unrestricted -Scope Process
+#Now, try activating again:
+venv\Scripts\Activate
+# Activate virtual environment (Linux/macOS)
+source venv/bin/activate
+# Upgrade pip
+python -m pip install --upgrade pip
+
+
+
+ Step 2: Install Required Dependencies
+ # Install all Python dependencies
+pip install -r requirements.txt
+
+
+Step 3: Setup and Start Docker Containers
+# Ensure Docker is running, then start Airflow, Postgres, and Redis
+docker-compose up -d
+
+
+Step 4: Initialize Airflow Database
+# Initialize the database (inside the Airflow container)
+docker exec -it automated-biomedical-data-pipline-airflow-1 airflow db init
+
+
+ Step 5: Create an Admin User for Airflow
+ # Create an Airflow user (inside the container)
+docker exec -it automated-biomedical-data-pipline-airflow-1 airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com
+
+ Step 6: Check DAGs Directory in Airflow
+# Go inside the Airflow container
+docker exec -it automated-biomedical-data-pipline-airflow-1 bash
+# List DAG files inside the container
+ls -l /opt/airflow/dags
+# If DAGs are missing, check if they exist locally
+ls -l C:\Users\hmdkr\Automated-Biomedical-Data-Pipline\dags
+
+ Step 7: Manually Copy DAGs if Not Found
+# Manually copy DAGs into the Airflow container
+docker cp C:\Users\hmdkr\Automated-Biomedical-Data-Pipline\dags automated-biomedical-data-pipline-airflow-1:/opt/airflow/
+
+
+ Step 8: Restart Airflow to Apply Changes
+ # Restart Airflow container
+docker-compose restart airflow
+
+Step 9: Debug Import Errors (if DAGs are still missing)
+# Inside the Airflow container, check for DAG import errors
+docker exec -it automated-biomedical-data-pipline-airflow-1 airflow dags list-import-errors
+
+Step 10: Reset Everything (If Needed)
+# Stop and remove all containers
+docker-compose down
+# Remove all volumes (WARNING: This deletes all stored data)
+docker-compose down -v
+# Restart everything
+docker-compose up -d
+
+# Your DAG is Not Showing in Airflow - Fix Steps
+Your etl_pipeline.py script is a standalone ETL process but not a valid Airflow DAG. This is why it is not appearing in the Airflow UI.Modify etl_pipeline.py to use Airflow Operators.
+
+ # see airflow
+http://localhost:8080/home
