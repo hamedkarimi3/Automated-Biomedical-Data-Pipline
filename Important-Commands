@@ -67,5 +67,8 @@ docker-compose down -v
 # Restart everything
 docker-compose up -d
 
-Your DAG is Not Showing in Airflow - Fix Steps
+# Your DAG is Not Showing in Airflow - Fix Steps
 Your etl_pipeline.py script is a standalone ETL process but not a valid Airflow DAG. This is why it is not appearing in the Airflow UI.Modify etl_pipeline.py to use Airflow Operators.
+
+ # see airflow
+http://localhost:8080/home
