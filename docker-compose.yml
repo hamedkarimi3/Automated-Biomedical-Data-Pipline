@@ -36,7 +36,7 @@ services:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
-      - ./data:/opt/airflow/data
+      - ./data/raw_new:/opt/airflow/data/raw_new
     command: >
       bash -c "airflow db init && airflow scheduler & airflow webserver"
 

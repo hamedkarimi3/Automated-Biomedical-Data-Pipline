@@ -1,5 +1,5 @@
 from airflow import DAG
-from airflow.operators.python import PythonOperator # type: ignore
+from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 import pandas as pd
 import json
@@ -14,38 +14,49 @@ default_args = {
 }
 
 # Define ETL Functions
-def extract_data():
+def extract_data(**kwargs):
     """Extract patient records and genomic data from CSV and JSON."""
     print("Extracting data...")
 
     # Load Patient Records (CSV)
-    patient_df = pd.read_csv("/opt/airflow/data/patient_records.csv")
+    patient_df = pd.read_csv("/opt/airflow/data/raw_new/patient_records.csv")
 
     # Load Genomic Data (JSON)
-    with open("/opt/airflow/data/genomics_data.json", "r") as file:
+    with open("/opt/airflow/data/raw_new/genomics_data.json", "r") as file:
         genomic_data = json.load(file)
     genomic_df = pd.DataFrame(genomic_data)
 
-    # Load Clinical Trials (CSV)
-    clinical_trials_df = pd.read_csv("/opt/airflow/data/clinical_trials.csv")
+    # Load Clinical Trials (CSV) - **Fixed Path**
+    clinical_trials_df = pd.read_csv("/opt/airflow/data/raw_new/clinical_trials.csv")
 
     print("Extraction complete.")
-    return patient_df.to_json(), genomic_df.to_json(), clinical_trials_df.to_json()
+
+    # Save extracted data as CSV for XCom size limit issues
+    patient_df.to_csv("/opt/airflow/data/processed/patient_records.csv", index=False)
+    genomic_df.to_csv("/opt/airflow/data/processed/genomics_data.csv", index=False)
+    clinical_trials_df.to_csv("/opt/airflow/data/processed/clinical_trials.csv", index=False)
+
+    # Push file paths to XCom instead of raw data
+    ti = kwargs["ti"]
+    ti.xcom_push(key="patient_path", value="/opt/airflow/data/processed/patient_records.csv")
+    ti.xcom_push(key="genomic_path", value="/opt/airflow/data/processed/genomics_data.csv")
+    ti.xcom_push(key="clinical_path", value="/opt/airflow/data/processed/clinical_trials.csv")
 
 def transform_data(**kwargs):
     """Transform and merge extracted data."""
     print("Transforming data...")
 
-    # Retrieve extracted data
     ti = kwargs["ti"]
-    patient_json = ti.xcom_pull(task_ids="extract")
-    genomic_json = ti.xcom_pull(task_ids="extract")
-    clinical_json = ti.xcom_pull(task_ids="extract")
 
-    # Convert JSON strings back to DataFrame
-    patient_df = pd.read_json(patient_json)
-    genomic_df = pd.read_json(genomic_json)
-    clinical_trials_df = pd.read_json(clinical_json)
+    # Retrieve file paths from XCom
+    patient_path = ti.xcom_pull(task_ids="extract", key="patient_path")
+    genomic_path = ti.xcom_pull(task_ids="extract", key="genomic_path")
+    clinical_path = ti.xcom_pull(task_ids="extract", key="clinical_path")
+
+    # Read from saved CSVs instead of XCom JSON
+    patient_df = pd.read_csv(patient_path)
+    genomic_df = pd.read_csv(genomic_path)
+    clinical_trials_df = pd.read_csv(clinical_path)
 
     # Merge Patient & Genomic Data
     merged_df = pd.merge(patient_df, genomic_df, on="patient_id", how="left")
@@ -58,21 +69,25 @@ def transform_data(**kwargs):
     final_df["date"] = pd.to_datetime(final_df["date"])
 
     print("Transformation complete.")
-    return final_df.to_json()
+
+    # Save transformed data as CSV
+    final_path = "/opt/airflow/data/processed/transformed_data.csv"
+    final_df.to_csv(final_path, index=False)
+
+    # Push path to XCom
+    ti.xcom_push(key="final_path", value=final_path)
 
 def load_data(**kwargs):
     """Load transformed data into storage."""
     print("Loading data...")
 
-    # Retrieve transformed data
     ti = kwargs["ti"]
-    final_json = ti.xcom_pull(task_ids="transform")
-    final_df = pd.read_json(final_json)
+    final_path = ti.xcom_pull(task_ids="transform", key="final_path")
 
-    # Save transformed data as CSV
-    final_df.to_csv("/opt/airflow/data/transformed_data.csv", index=False)
-
-    print("Data successfully loaded.")
+    if final_path:
+        print(f"Data successfully loaded from: {final_path}")
+    else:
+        print("Error: No data path found in XCom.")
 
 # Define Airflow DAG
 with DAG(
@@ -85,7 +100,8 @@ with DAG(
 
     task_extract = PythonOperator(
         task_id="extract",
-        python_callable=extract_data
+        python_callable=extract_data,
+        provide_context=True
     )
 
     task_transform = PythonOperator(
@@ -102,4 +118,3 @@ with DAG(
 
     # Define task dependencies
     task_extract >> task_transform >> task_load
-
