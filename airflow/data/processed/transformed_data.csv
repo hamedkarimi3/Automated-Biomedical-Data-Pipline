@@ -1,5 +1,0 @@
-patient_id,name,age,gender,diagnosis,date_admitted,gene,mutation,sequence,trial_id,drug,test_result,date
-1001,John Doe,45,M,Diabetes,2024-01-05,BRCA1,Positive,AGCTTGAC...,T1001,Metformin,Effective,2024-02-01
-1002,Jane Smith,30,F,Hypertension,2024-02-10,TP53,Negative,GATTACAG...,T1002,Lisinopril,Neutral,2024-02-15
-1003,Ali Khan,55,M,Cancer,2024-03-15,EGFR,Positive,TTGACCTG...,T1003,Keytruda,Effective,2024-03-05
-1004,Emily Zhang,40,F,Asthma,2024-04-20,APOE,Negative,CGTAACTG...,T1004,Salbutamol,Neutral,2024-04-12
