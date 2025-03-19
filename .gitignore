@@ -1,12 +1,43 @@
-# Ignore virtual environments
+# Ignore virtual environment
 venv/
-.venv/
-
-# Ignore compiled Python files
-__pycache__/
 *.pyc
-*.pyo
+__pycache__/
 
-# Ignore logs and temp files
+# Ignore logs
 logs/
 *.log
+airflow-webserver-monitor.pid
+
+# Ignore database & cache files
+*.sqlite3
+*.db
+*.sql
+*.pid
+
+# Ignore compiled Python files
+*.py[cod]
+__pycache__/
+*/__pycache__/
+
+# Ignore Docker-related files
+docker-compose.override.yml
+.dockerignore
+
+# Ignore environment files
+.env
+*.env
+
+# Ignore Jupyter Notebooks checkpoints
+.ipynb_checkpoints/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+*.iml
+
+# Ignore airflow dags folder (OPTIONAL: Uncomment if needed)
+# dags/

@@ -1,0 +1,146 @@
+
+
+### **🛠 1️⃣ Setup Git & Initialize Repository (Only Once)**
+If not already set up, run:  
+```powershell
+# Check if Git is installed
+git --version
+
+# Set your global username & email (replace with your info)
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+
+# Initialize Git (Only if not already initialized)
+git init
+```
+---
+
+### **📥 2️⃣ Clone Repository (Only for First Time)**
+If you're setting up a fresh local environment:
+```powershell
+git clone https://github.com/hamedkarimi3/Automated-Biomedical-Data-Pipline.git
+cd Automated-Biomedical-Data-Pipline
+```
+
+---
+
+### **📌 3️⃣ Check Status & Untracked Files**
+```powershell
+git status
+```
+This shows:
+- **Modified** files
+- **Untracked** files  
+- **Files staged for commit**
+
+---
+
+### **📌 4️⃣ Stage and Commit Changes**
+To add all modified files:
+```powershell
+git add .
+```
+Or, add specific files:
+```powershell
+git add dags/etl_pipeline.py
+git add requirements.txt
+```
+Commit the changes:
+```powershell
+git commit -m "Updated ETL DAG and requirements"
+```
+
+---
+
+### **📤 5️⃣ Push Changes to GitHub**
+To push to the **main** branch:
+```powershell
+git push origin main
+```
+If it's your first push:
+```powershell
+git push --set-upstream origin main
+```
+
+---
+
+### **📥 6️⃣ Pull Latest Changes from GitHub**
+To update your local repo with the latest changes from GitHub:
+```powershell
+git pull origin main
+```
+
+---
+
+### **🔄 7️⃣ Handle Merge Conflicts**
+If you face a merge conflict:
+1. Open files in an editor (VS Code, Notepad++)
+2. Fix conflicting sections (marked with `<<<<<<<` and `>>>>>>>`)
+3. Stage & commit the fixed files:
+   ```powershell
+   git add .
+   git commit -m "Resolved merge conflict"
+   ```
+4. Push the resolved version:
+   ```powershell
+   git push origin main
+   ```
+
+---
+
+### **🗑 8️⃣ Remove a File from Git (But Keep Locally)**
+```powershell
+git rm --cached filename.py
+```
+Example:
+```powershell
+git rm --cached venv/
+```
+Then commit & push:
+```powershell
+git commit -m "Removed venv from Git tracking"
+git push origin main
+```
+
+---
+
+### **🛠 9️⃣ Create a New Branch (Optional)**
+For new feature development:
+```powershell
+git checkout -b new-feature-branch
+```
+After making changes:
+```powershell
+git add .
+git commit -m "Added new feature"
+git push origin new-feature-branch
+```
+---
+
+### **🔄 🔥 1️⃣0️⃣ Reset Changes (Undo Mistakes)**
+1. **Undo the last commit (keep changes unstaged):**
+   ```powershell
+   git reset HEAD~
+   ```
+2. **Undo the last commit (discard changes completely):**
+   ```powershell
+   git reset --hard HEAD~
+   ```
+
+---
+
+### **📌 Summary of Essential Git Commands**
+| Command | Description |
+|---------|-------------|
+| `git status` | Check the current state of the repo |
+| `git add .` | Stage all changes |
+| `git commit -m "Message"` | Commit changes |
+| `git push origin main` | Push changes to GitHub |
+| `git pull origin main` | Pull latest changes from GitHub |
+| `git checkout -b branch-name` | Create a new branch |
+| `git merge branch-name` | Merge another branch into the current one |
+| `git rm --cached file` | Stop tracking a file but keep it locally |
+| `git reset --hard HEAD~` | Undo last commit completely |
+
+---
+
