@@ -1,5 +1,6 @@
-echo "trial_id,patient_id,drug,test_result,date
-T1001,1001,Metformin,Effective,2024-02-01
-T1002,1002,Lisinopril,Neutral,2024-02-15
-T1003,1003,Keytruda,Effective,2024-03-05
-T1004,1004,Salbutamol,Neutral,2024-04-12" > data/clinical_trials.csv
+[
+    {"patient_id": 1001, "gene": "BRCA1", "mutation": "Positive", "sequence": "AGCTTGAC..."},
+    {"patient_id": 1002, "gene": "TP53", "mutation": "Negative", "sequence": "GATTACAG..."},
+    {"patient_id": 1003, "gene": "EGFR", "mutation": "Positive", "sequence": "TTGACCTG..."},
+    {"patient_id": 1004, "gene": "APOE", "mutation": "Negative", "sequence": "CGTAACTG..."}
+]
